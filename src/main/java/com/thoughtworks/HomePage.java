@@ -1,7 +1,5 @@
 package com.thoughtworks;
 
-import java.util.Scanner;
-
 public class HomePage {
 
     private final static String INIT_MESSAGE = "1. 注册\n2. 登录\n3. 退出\n请输入你的选择(1~3)：";
@@ -19,7 +17,7 @@ public class HomePage {
     public void handleChoice(String choice) {
         switch (choice) {
             case "1":
-                new SignUp().initPage();
+                new SignUpPage().initPage();
                 break;
             case "2":
                 System.out.println(SIGN_IN_MESSAGE);
