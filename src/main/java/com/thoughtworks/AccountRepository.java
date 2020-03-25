@@ -1,5 +1,7 @@
 package com.thoughtworks;
 
+import jdk.nashorn.internal.scripts.JD;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,5 +33,24 @@ public class AccountRepository {
             JDBCUtil.releaseSource(conn, pre, result);
         }
         return account;
+    }
+
+    public void saveAccount(Account account) {
+        Connection conn = null;
+        PreparedStatement pre = null;
+        try {
+            conn = JDBCUtil.connectToDB();
+            String sql = "INSERT INTO account_sys VALUES (?, ?, ?, ?)";
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, account.getUserName());
+            pre.setString(2, account.getPhoneNumber());
+            pre.setString(3, account.getEmail());
+            pre.setString(4, account.getPassword());
+            pre.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.releaseSource(conn, pre);
+        }
     }
 }
