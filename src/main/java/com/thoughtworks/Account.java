@@ -5,6 +5,8 @@ public class Account {
     private String phoneNumber;
     private String email;
     private String password;
+    private int queryTimes;
+    private String accountState;
 
     public Account() {
     }
@@ -14,6 +16,22 @@ public class Account {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+    }
+
+    public int getQueryTimes() {
+        return queryTimes;
+    }
+
+    public void setQueryTimes(int queryTimes) {
+        this.queryTimes = queryTimes;
+    }
+
+    public String getAccountState() {
+        return accountState;
+    }
+
+    public void setAccountState(String accountState) {
+        this.accountState = accountState;
     }
 
     public String getUserName() {

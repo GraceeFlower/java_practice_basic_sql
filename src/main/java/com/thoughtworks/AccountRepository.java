@@ -1,7 +1,5 @@
 package com.thoughtworks;
 
-import jdk.nashorn.internal.scripts.JD;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +14,7 @@ public class AccountRepository {
         ResultSet result = null;
         try {
             conn = JDBCUtil.connectToDB();
-            String sql = "SELECT username, phone_num, email, password " +
+            String sql = "SELECT username, phone_num, email, password, query_times, account_state " +
                 "FROM account_sys WHERE username = ?";
             pre = conn.prepareStatement(sql);
             pre.setString(1, username);
@@ -26,6 +24,8 @@ public class AccountRepository {
                 account.setPhoneNumber(result.getString("phone_num"));
                 account.setEmail(result.getString("email"));
                 account.setPassword(result.getString("password"));
+                account.setQueryTimes(result.getInt("query_times"));
+                account.setAccountState(result.getString("account_state"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,12 +40,31 @@ public class AccountRepository {
         PreparedStatement pre = null;
         try {
             conn = JDBCUtil.connectToDB();
-            String sql = "INSERT INTO account_sys VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO account_sys (username, phone_num, email, password) " +
+                "VALUES (?, ?, ?, ?)";
             pre = conn.prepareStatement(sql);
             pre.setString(1, account.getUserName());
             pre.setString(2, account.getPhoneNumber());
             pre.setString(3, account.getEmail());
             pre.setString(4, account.getPassword());
+            pre.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.releaseSource(conn, pre);
+        }
+    }
+
+    public void updateStatement(Account account) {
+        Connection conn = null;
+        PreparedStatement pre = null;
+        try {
+            conn = JDBCUtil.connectToDB();
+            String sql = "UPDATE account_sys SET query_times = ?, account_state = ? WHERE username = ?";
+            pre = conn.prepareStatement(sql);
+            pre.setInt(1, account.getQueryTimes());
+            pre.setString(2, account.getAccountState());
+            pre.setString(3, account.getUserName());
             pre.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
