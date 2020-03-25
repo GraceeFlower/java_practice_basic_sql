@@ -25,7 +25,7 @@ public class SignUpPage {
         FormatChecker formatChecker = new FormatChecker(registerArr);
         if (4 != registerArr.length) {
             System.out.println(WRONG_FORMAT);
-            initPage();
+            HomePage.initPage();
         } else if(formatChecker.isCorrect()) {
             handleCorrectMsg(registerArr);
             System.out.println(String.format(SIGN_UP_SUCCESSFULLY, registerArr[0]));
@@ -38,5 +38,6 @@ public class SignUpPage {
 
     private void handleCorrectMsg(String[] msg) {
         repository.saveAccount(new Account(msg[0], msg[1], msg[2], msg[3]));
+        HomePage.initPage();
     }
 }
