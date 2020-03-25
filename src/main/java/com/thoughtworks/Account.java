@@ -1,7 +1,7 @@
 package com.thoughtworks;
 
 public class Account {
-    private String userName;
+    private String username;
     private String phoneNumber;
     private String email;
     private String password;
@@ -9,19 +9,19 @@ public class Account {
     public Account() {
     }
 
-    public Account(String userName, String phoneNumber, String email, String password) {
-        this.userName = userName;
+    public Account(String username, String phoneNumber, String email, String password) {
+        this.username = username;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(String username) {
+        this.username = username;
     }
 
     public String getPhoneNumber() {
@@ -51,7 +51,7 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-            "userName='" + userName + '\'' +
+            "username='" + username + '\'' +
             ", phoneNumber='" + phoneNumber + '\'' +
             ", email='" + email + '\'' +
             ", password='" + password + '\'' +
