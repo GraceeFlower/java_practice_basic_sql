@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class SignInPage {
 
-    private final static String SIGN_IN_MESSAGE = "请输入用户名和密码(格式：用户名,密码)：";
+    private final static String INIT_MESSAGE = "请输入用户名和密码(格式：用户名,密码)：";
     private final static String WRONG_FORMAT = "格式错误\n请按正确格式输入用户名和密码：";
     private final static String INVALID_ACCOUNT = "密码或用户名错误\n请重新输入用户名和密码：";
     private final static String LOCK_ACCOUNT = "您已3次输错密码，账号被锁定";
@@ -15,7 +15,7 @@ public class SignInPage {
     private AccountRepository repository = new AccountRepository();
 
     public void initPage() {
-        System.out.println(SIGN_IN_MESSAGE);
+        System.out.println(INIT_MESSAGE);
         String accountMsg = scanner.nextLine();
         checkFormat(accountMsg);
     }
