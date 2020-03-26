@@ -10,9 +10,10 @@ public class SignInPage {
     private final static String LOCK_ACCOUNT = "您已3次输错密码，账号被锁定";
     private final static String SIGN_IN_SUCCESSFULLY = "%s，欢迎回来！\n您的手机号是%s，邮箱是%s\n";
     private final static String LOCKED = "locked";
-    private final static String ACTIVE = "active";
     private final static Scanner scanner = new Scanner(System.in);
     private AccountRepository repository = new AccountRepository();
+    private int attemptTime = 0;
+    private String user = "";
 
     public void initPage() {
         System.out.println(INIT_MESSAGE);
@@ -29,15 +30,23 @@ public class SignInPage {
         }
     }
 
+    private void checkCounter(String[] accountArr) {
+        if (!user.equals(accountArr[0])) {
+            user = accountArr[0];
+            attemptTime = 1;
+        } else {
+            attemptTime++;
+        }
+    }
+
     private void checkAccount(String[] accountArr) {
         Account account = repository.queryAccount(accountArr[0]);
         if (null != account && !LOCKED.equals(account.getAccountState())) {
-            account.setQueryTimes(account.getQueryTimes() + 1);
-            repository.updateStatement(account);
+            checkCounter(accountArr);
             if (accountArr[0].equals(account.getUserName())
                 && accountArr[1].equals(account.getPassword())) {
                 handleCorrectInput(account);
-            } else if (3 == account.getQueryTimes()) {
+            } else if (3 == attemptTime) {
                 handleLockedUser(account);
             } else {
                 handleWrongInput(INVALID_ACCOUNT);
@@ -55,8 +64,6 @@ public class SignInPage {
             account.getUserName(),
             account.getPhoneNumber(),
             account.getEmail()));
-        account.setQueryTimes(0);
-        repository.updateStatement(account);
         HomePage.initPage();
     }
 

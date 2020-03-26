@@ -25,7 +25,7 @@ public class SignUpPage {
         FormatChecker formatChecker = new FormatChecker(registerArr);
         if (4 != registerArr.length) {
             System.out.println(WRONG_FORMAT);
-            HomePage.initPage();
+            initPage();
         } else if(formatChecker.isCorrect()) {
             handleCorrectMsg(registerArr);
             System.out.println(String.format(SIGN_UP_SUCCESSFULLY, registerArr[0]));
