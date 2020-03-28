@@ -1,4 +1,4 @@
-package com.thoughtworks;
+package com.thoughtworks.util;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,16 +14,17 @@ public class JDBCUtil {
     private static String PASSWORD;
 
     static {
+        Properties pro = new Properties();
+        ClassLoader classLoader = JDBCUtil.class.getClassLoader();
+        URL url = classLoader.getResource("jdbc.properties");
+        String path = Objects.requireNonNull(url).getPath();
         try {
-            Properties pro = new Properties();
-            ClassLoader classLoader = JDBCUtil.class.getClassLoader();
-            URL pathURL = classLoader.getResource("jdbc.properties");
-            String path = Objects.requireNonNull(pathURL).getPath();
             pro.load(new FileReader(path));
             URL = pro.getProperty("URL");
             USER = pro.getProperty("USER");
             PASSWORD = pro.getProperty("PASSWORD");
-        } catch (IOException e) {
+            Class.forName(pro.getProperty("DRIVER"));
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -32,22 +33,7 @@ public class JDBCUtil {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static void releaseSource(Connection conn, Statement pre) {
-        doubleClose(conn, pre);
-    }
-
-    public static void releaseSource(Connection conn, Statement pre, ResultSet res) {
-        doubleClose(conn, pre);
-        if (null != res) {
-            try {
-                res.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static void doubleClose(Connection conn, Statement pre) {
+    public static void releaseSource(Statement pre, Connection conn) {
         if (null != pre) {
             try {
                 pre.close();
@@ -63,4 +49,16 @@ public class JDBCUtil {
             }
         }
     }
+
+    public static void releaseSource(ResultSet res, Statement pre, Connection conn) {
+        if (null != res) {
+            try {
+                res.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        releaseSource(pre, conn);
+    }
+
 }

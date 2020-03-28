@@ -1,4 +1,4 @@
-package com.thoughtworks;
+package com.thoughtworks.entities;
 
 public class Account {
     private String username;

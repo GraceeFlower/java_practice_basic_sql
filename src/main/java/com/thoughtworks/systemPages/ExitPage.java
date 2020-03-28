@@ -1,4 +1,4 @@
-package com.thoughtworks;
+package com.thoughtworks.systemPages;
 
 public class ExitPage {
 

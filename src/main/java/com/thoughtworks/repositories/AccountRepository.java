@@ -1,4 +1,7 @@
-package com.thoughtworks;
+package com.thoughtworks.repositories;
+
+import com.thoughtworks.entities.Account;
+import com.thoughtworks.util.JDBCUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,7 +33,7 @@ public class AccountRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCUtil.releaseSource(conn, pre, result);
+            JDBCUtil.releaseSource(result, pre, conn);
         }
         return account;
     }
@@ -51,7 +54,7 @@ public class AccountRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCUtil.releaseSource(conn, pre);
+            JDBCUtil.releaseSource(pre, conn);
         }
     }
 
@@ -69,7 +72,7 @@ public class AccountRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCUtil.releaseSource(conn, pre);
+            JDBCUtil.releaseSource(pre, conn);
         }
     }
 }

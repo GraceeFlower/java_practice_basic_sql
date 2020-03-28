@@ -1,4 +1,4 @@
-package com.thoughtworks;
+package com.thoughtworks.systemPages;
 
 import java.util.Scanner;
 

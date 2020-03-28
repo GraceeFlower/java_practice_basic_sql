@@ -1,4 +1,8 @@
-package com.thoughtworks;
+package com.thoughtworks.systemPages;
+
+import com.thoughtworks.entities.Account;
+import com.thoughtworks.repositories.AccountRepository;
+import com.thoughtworks.util.FormatChecker;
 
 import java.util.Scanner;
 
@@ -29,6 +33,7 @@ public class SignUpPage {
         } else if(formatChecker.isCorrect()) {
             handleCorrectMsg(registerArr);
             System.out.println(String.format(SIGN_UP_SUCCESSFULLY, registerArr[0]));
+            HomePage.initPage();
         } else {
             System.out.println(String.format(
                 SIGN_UP_FAILED, formatChecker.getFirstErrorMsg()));
@@ -38,6 +43,5 @@ public class SignUpPage {
 
     private void handleCorrectMsg(String[] msg) {
         repository.saveAccount(new Account(msg[0], msg[1], msg[2], msg[3]));
-        HomePage.initPage();
     }
 }
