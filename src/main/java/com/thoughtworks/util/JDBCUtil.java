@@ -33,7 +33,14 @@ public class JDBCUtil {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static void releaseSource(Statement pre, Connection conn) {
+    public static void releaseSource(ResultSet res, Statement pre, Connection conn) {
+        if (null != res) {
+            try {
+                res.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         if (null != pre) {
             try {
                 pre.close();
@@ -48,17 +55,6 @@ public class JDBCUtil {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void releaseSource(ResultSet res, Statement pre, Connection conn) {
-        if (null != res) {
-            try {
-                res.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        releaseSource(pre, conn);
     }
 
 }
