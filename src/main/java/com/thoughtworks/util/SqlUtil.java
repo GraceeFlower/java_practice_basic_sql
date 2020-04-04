@@ -22,37 +22,15 @@ public class SqlUtil {
         }
     }
 
-    public static <T> T executeQuerySingle(Connection conn, Class<T> clazz, String sql, Object... args) {
-        PreparedStatement pre = null;
-        ResultSet rs = null;
-        T t = null;
-        try {
-            pre = conn.prepareStatement(sql);
-            for (int i = 0; i < args.length; i++) {
-                pre.setObject(i + 1, args[i]);
-            }
-            rs = pre.executeQuery();
-            ResultSetMetaData resultSetMD = rs.getMetaData();
-            int columnCount = resultSetMD.getColumnCount();
-            if (rs.next()) {
-                t = clazz.newInstance();
-                for (int i = 0; i < columnCount; i++) {
-                    String columnName = resultSetMD.getColumnLabel(i + 1);
-                    Object columnValue = rs.getObject(columnName);
-                    Field field = clazz.getDeclaredField(columnName);
-                    field.setAccessible(true);
-                    field.set(t, columnValue);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            JDBCUtil.releaseSource(rs, pre, conn);
-        }
-        return t;
+    public static <T> T executeQuerySingle(Connection conn, String sql, Class<T> clazz, Object... args) {
+        return executeQuery(conn, sql, clazz, args).get(0);
     }
 
     public static <T> List<T> executeQueryAll(Connection conn, String sql, Class<T> clazz, Object... args) {
+        return executeQuery(conn, sql, clazz, args);
+    }
+
+    public static <T> List<T> executeQuery(Connection conn, String sql, Class<T> clazz, Object... args) {
         PreparedStatement pre = null;
         ResultSet rs = null;
         List<T> list = new ArrayList<>();
@@ -64,12 +42,19 @@ public class SqlUtil {
             rs = pre.executeQuery();
             ResultSetMetaData resultSetMD = rs.getMetaData();
             int columnCount = resultSetMD.getColumnCount();
+            Field field;
+            Class<? super T> superClass;
             while (rs.next()) {
                 T t = clazz.newInstance();
                 for (int i = 0; i < columnCount; i++) {
                     String columnName = resultSetMD.getColumnLabel(i + 1);
                     Object columnValue = rs.getObject(columnName);
-                    Field field = clazz.getDeclaredField(columnName);
+                    try {
+                        field = clazz.getDeclaredField(columnName);
+                    } catch (Exception e){
+                        superClass = clazz.getSuperclass();
+                        field = superClass.getDeclaredField(columnName);
+                    }
                     field.setAccessible(true);
                     field.set(t, columnValue);
                 }

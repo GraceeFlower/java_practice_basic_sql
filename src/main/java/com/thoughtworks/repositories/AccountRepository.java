@@ -13,7 +13,7 @@ public class AccountRepository {
         try {
             Connection conn = JDBCUtil.connectToDB();
             String sql = "SELECT username, phoneNumber, email, password, queryTimes, accountState FROM account_sys WHERE username = ?";
-            account = SqlUtil.executeQuerySingle(conn, account.getClass(), sql, username);
+            account = SqlUtil.executeQuerySingle(conn, sql, account.getClass(), username);
         } catch (SQLException e) {
             e.printStackTrace();
         }
