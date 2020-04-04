@@ -26,10 +26,6 @@ public class SqlUtil {
         return executeQuery(conn, sql, clazz, args).get(0);
     }
 
-    public static <T> List<T> executeQueryAll(Connection conn, String sql, Class<T> clazz, Object... args) {
-        return executeQuery(conn, sql, clazz, args);
-    }
-
     public static <T> List<T> executeQuery(Connection conn, String sql, Class<T> clazz, Object... args) {
         PreparedStatement pre = null;
         ResultSet rs = null;
