@@ -38,19 +38,12 @@ public class SqlUtil {
             rs = pre.executeQuery();
             ResultSetMetaData resultSetMD = rs.getMetaData();
             int columnCount = resultSetMD.getColumnCount();
-            Field field;
-            Class<? super T> superClass;
             while (rs.next()) {
                 T t = clazz.newInstance();
                 for (int i = 0; i < columnCount; i++) {
                     String columnName = resultSetMD.getColumnLabel(i + 1);
                     Object columnValue = rs.getObject(columnName);
-                    try {
-                        field = clazz.getDeclaredField(columnName);
-                    } catch (Exception e){
-                        superClass = clazz.getSuperclass();
-                        field = superClass.getDeclaredField(columnName);
-                    }
+                    Field field = clazz.getDeclaredField(columnName);
                     field.setAccessible(true);
                     field.set(t, columnValue);
                 }
